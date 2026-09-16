@@ -12,13 +12,9 @@ Monitor for search listings stored in DuckDB. It does **not** scrape Booking.com
 
 ## Find the database
 
-`resolve_db()` checks, in order:
+The app reads **`booking.duckdb` in this folder** (shipped with the deploy). Override with `DUCKDB_PATH` if needed. It also falls back to `../booking.duckdb` and `../modal/booking.duckdb`.
 
-1. Environment variable `DUCKDB_PATH`
-2. `../booking.duckdb` (project root)
-3. `../modal/booking.duckdb`
-
-Copy `.env.example` to `.env` if you want a custom path. The file is currently about 4 MB.
+After a Modal scrape, copy `/data/booking.duckdb` into this folder (or set `DUCKDB_PATH`) so the hosted UI sees new rows.
 
 ## Run locally
 
@@ -37,7 +33,7 @@ DuckDB is an embedded file. The hosted app must be able to **open that file**.
 | Approach | How the app reads DuckDB |
 | --- | --- |
 | Same machine / Modal Volume | Mount the volume and set `DUCKDB_PATH=/data/booking.duckdb` |
-| Streamlit Community Cloud | Commit or download a snapshot; Community Cloud has no persistent disk |
+| Streamlit Community Cloud | Put `booking.duckdb` in this folder and deploy the folder; refresh the file when data changes |
 | Object storage | Scraper uploads `booking.duckdb`; app downloads it at startup into `DUCKDB_PATH` |
 
 Do not point the dashboard at the same file the scraper is actively writing. Prefer a snapshot copy for the UI.

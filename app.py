@@ -22,6 +22,7 @@ PAGE_SIZE = 10
 
 DEFAULT_DB_CANDIDATES = [
     os.getenv("DUCKDB_PATH"),
+    str(ROOT / "booking.duckdb"),
     str(PROJECT / "booking.duckdb"),
     str(PROJECT / "modal" / "booking.duckdb"),
 ]
@@ -33,10 +34,10 @@ def resolve_db() -> Path | None:
             continue
         path = Path(raw)
         if not path.is_absolute():
-            path = PROJECT / path
+            path = ROOT / path
         if path.exists():
             return path
-    return Path(PROJECT / "booking.duckdb")
+    return ROOT / "booking.duckdb"
 
 
 ROOM_TYPE_RE = re.compile(
